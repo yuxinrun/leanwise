@@ -4,7 +4,7 @@
 >
 > 中文科学减脂知识库 + 实战减脂手册 + 体重管理数据实验室。不是减肥博客，而是一个把机制、证据、工具与个人记录串起来的知识平台。
 
-**线上地址**：<https://yuxinrun.github.io/leanwise/>（推送 `main` 后由 GitHub Actions 自动部署）
+**线上地址**：<https://www.yuxin.run/leanwise/>（自定义域名；GitHub Pages 原始地址 <https://yuxinrun.github.io/leanwise/> 会跳转至此）。推送 `main` 后由 GitHub Actions 自动部署。
 
 ---
 
@@ -108,12 +108,18 @@ pnpm dev          # http://localhost:3000
 
 ## 六、GitHub Pages 自动部署
 
-### 启用步骤（只需一次）
+### 当前状态
 
-1. 打开仓库 **Settings → Pages**，在 *Build and deployment → Source* 选择 **GitHub Actions**。
-2. 确认 **Settings → Actions → General** 允许 workflow 运行（含 `Read and write permissions` 或本 workflow 显式声明的 `pages: write` / `id-token: write`）。
+本仓库已启用 GitHub Pages（Source = **GitHub Actions**）并绑定自定义域名 `www.yuxin.run`。首次推送 `main` 后 `Deploy to GitHub Pages` 的 `build` 与 `deploy` 两个 job 均成功，站点已发布。此后每次推送 `main` 都会自动重新构建并发布。
+
+### 迁移到新仓库时的启用步骤
+
+1. 打开新仓库 **Settings → Pages**，在 *Build and deployment → Source* 选择 **GitHub Actions**。
+2. 确认 **Settings → Actions → General** 允许 workflow 运行（本 workflow 已显式声明 `pages: write` / `id-token: write`）。
 3. 推送 `main` 分支，或在 **Actions → Deploy to GitHub Pages** 手动 `Run workflow`。
-4. 部署完成后访问 <https://yuxinrun.github.io/leanwise/>。
+4. 部署完成后访问 `https://<owner>.github.io/<repo>/`。
+
+> 当前线上保留 `/leanwise/` 子路径，因此构建必须使用 `basePath=/leanwise`；请勿在未调整域名跳转规则前直接设置 `CUSTOM_DOMAIN`，否则资源路径会与现有跳转不一致。
 
 ### 触发条件
 
@@ -135,7 +141,10 @@ pnpm install --frozen-lockfile → pnpm typecheck → pnpm build:pages
 | `GITHUB_PAGES` | `true` | 在 `next.config.mjs` 中启用 `output: 'export'`、`basePath`、`trailingSlash` |
 | `NEXT_PUBLIC_SITE_ORIGIN` | `https://yuxinrun.github.io` | `metadataBase`、canonical、og:url、sitemap、robots、JSON-LD |
 | `NEXT_PUBLIC_BASE_PATH` | `/leanwise` | 所有内部链接、`/_next/` 资源、Hero 本地图片路径的前缀 |
-| `PAGES_CNAME` | 空 | 设置自定义域名时同时写入 `out/CNAME`，并把 basePath 置空 |
+| `PAGES_CNAME` | 空 | 设置自定义域名（根路径部署）时写入 `out/CNAME`，并把 basePath 置空 |
+| `SITE_ORIGIN`（Actions 变量，可选） | `https://yuxinrun.github.io` | 仅覆盖 canonical / sitemap / og:url 的域名，不改变 `/leanwise` 路径 |
+
+当前站点通过自定义域名访问时，建议在仓库 **Settings → Secrets and variables → Actions → Variables** 设置 `SITE_ORIGIN=https://www.yuxin.run`，让 canonical 与 sitemap 直接指向 `https://www.yuxin.run/leanwise/`，避免搜索引擎经过一次跳转。设置后手动 `Run workflow` 即可生效。
 
 产物 `out/` 中会自动生成 `.nojekyll`（避免 GitHub Pages 忽略 `_next` 目录）、`sitemap.xml`、`robots.txt` 与 `404.html`。
 
@@ -155,6 +164,8 @@ npx serve out
 > 常规 `pnpm dev` / `pnpm build` 不会启用 `basePath` 与静态导出，本地开发体验不受影响。
 
 ### 自定义域名
+
+> 当前 `www.yuxin.run → /leanwise/` 的跳转由域名侧配置维护，workflow 不管理该跳转。以下内容适用于「希望站点运行在域名根路径」的场景，启用前请先同步调整现有跳转规则。
 
 1. 在 DNS 为域名添加指向 `yuxinrun.github.io` 的 `CNAME` 记录。
 2. 仓库 **Settings → Secrets and variables → Actions → Variables** 新增 `CUSTOM_DOMAIN`，值为你的域名。

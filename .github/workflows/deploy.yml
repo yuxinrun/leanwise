@@ -38,8 +38,10 @@ jobs:
 
       - name: Build static export
         env:
-          # 可选：在仓库 Settings → Secrets and variables → Actions → Variables
-          # 设置 CUSTOM_DOMAIN 即可启用自定义域名（同时需配置 DNS CNAME）。
+          # 可选：在仓库 Settings → Secrets and variables → Actions → Variables 中设置
+          # SITE_ORIGIN 让 canonical / sitemap / og:url 指向自定义域名（保留 /leanwise 前缀）。
+          # CUSTOM_DOMAIN 用于根路径部署：写入 out/CNAME 并去掉 basePath。
+          NEXT_PUBLIC_SITE_ORIGIN: ${{ vars.SITE_ORIGIN }}
           PAGES_CNAME: ${{ vars.CUSTOM_DOMAIN }}
         run: pnpm build:pages
 
