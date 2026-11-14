@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --forest: #245b45;
+    --ink: #173c30;
+    --cream: #f7f6ef;
+    --mint: #e5efe6;
+    --orange: #e89a51;
+    --sun: #f2c879;
+    --charcoal: #292d2a;
+    --mist: #858b84;
+    --line: #dddcd1;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    @apply bg-cream text-charcoal antialiased;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+  }
+
+  ::selection {
+    background: #c8dec9;
+    color: #173c30;
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  input, select, textarea, button {
+    font: inherit;
+  }
+
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-forest;
+  }
+
+  .hairline {
+    @apply border-line;
+  }
+
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2 focus-visible:ring-offset-cream;
+  }
+
+  .num {
+    @apply font-mono tabular-nums;
+  }
+
+  .link-arrow {
+    @apply inline-flex items-center gap-2 text-forest font-medium underline-offset-4 hover:underline;
+  }
+
+  .table-shell {
+    @apply w-full overflow-x-auto overscroll-x-contain;
+  }
+
+  .paper-grid {
+    background-image: linear-gradient(to right, rgba(36, 91, 69, 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(36, 91, 69, 0.055) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .article-body {
+    @apply text-[1.02rem] leading-[1.95] text-charcoal/90;
+  }
+
+  .article-body h2 {
+    @apply font-display text-[1.75rem] sm:text-3xl text-ink mt-14 mb-5 pt-6 border-t border-line;
+  }
+
+  .article-body h3 {
+    @apply text-xl font-semibold text-ink mt-9 mb-3;
+  }
+
+  .article-body p {
+    @apply my-5;
+  }
+
+  .article-body ul {
+    @apply list-disc pl-6 my-5 space-y-2;
+  }
+
+  .article-body ol {
+    @apply list-decimal pl-6 my-5 space-y-2;
+  }
+
+  .article-body strong {
+    @apply text-ink font-semibold;
+  }
+}
